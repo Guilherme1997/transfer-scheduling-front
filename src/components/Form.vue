@@ -19,13 +19,24 @@
           <div class="col-12 col-sm-3">
             <div class="form-group">
               <label for="formGroupExampleInput">Conta de Destino</label>
-              <input  @keyup="validarDestino" id="destino" maxlength="9" class="form-control" />
+              <input
+                @keyup="validarDestino"
+                id="destino"
+                maxlength="9"
+                class="form-control"
+              />
             </div>
           </div>
           <div class="col-12 col-sm-3">
             <div class="form-group">
               <label for="formGroupExampleInput">Valor da Tranfêrencia</label>
-              <input id="valor" class="form-control" />
+
+              <money
+                id="valor"
+                class="form-control"
+                v-model="price"
+                v-bind="money"
+              ></money>
             </div>
           </div>
           <div class="col-12 col-sm-3">
@@ -48,12 +59,16 @@
             </div>
           </div>
 
-          <div style="padding-top: 15px" class="d-flex align-items-center">
-            <button
+          <div style="padding-top: 14px" class="d-flex align-items-center">
+            <!-- <button
               type="button"
               v-on:click="agendar"
               class="btn btn-primary btn-sm"
             >
+              Agendar
+            </button> -->
+
+            <button @click="agendar()" class="btn btn-primary" type="button">
               Agendar
             </button>
           </div>
@@ -64,9 +79,22 @@
 </template>
 
 <script>
+import { Money } from "v-money";
+
 export default {
+  components: { Money },
+
   name: "Form",
+
   methods: {
+    obterValore: () => {
+      return {
+        contaOrigem: document.getElementById("origem").value,
+        contaDestino: document.getElementById("destino").value,
+        valor: document.getElementById("valor").value,
+        dataTransferencia:document.getElementById("dataTransferencia").value
+      };
+    },
     validarOrigem: function () {
       let origem = document.getElementById("origem").value;
       if (origem != "") {
@@ -79,7 +107,7 @@ export default {
       }
     },
 
-   validarDestino: function () {
+    validarDestino: function () {
       let destino = document.getElementById("destino").value;
       if (destino != "") {
         if (isNaN(destino)) {
@@ -90,7 +118,8 @@ export default {
         }
       }
     },
-    agendar: () => {
+
+    agendar: function () {
       let dataTransferencia =
         document.getElementById("dataTransferencia").value;
 
@@ -109,8 +138,13 @@ export default {
       }
       if (origem.length != 9 || destino.length != 9) {
         alert("O número da conta está incorreto!");
+        return;
       }
+      this.$emit("incrementar", this.obterValore());
     },
+  },
+  created() {
+    this.$emit("handler", this.setValue);
   },
   data() {
     function dataAtualFormatada() {
@@ -121,6 +155,16 @@ export default {
       return dia + "/" + mes + "/" + ano;
     }
     return {
+      price: 0,
+
+      money: {
+        decimal: ",",
+        thousands: ".",
+        prefix: "R$ ",
+        suffix: " ",
+        precision: 2,
+        masked: false,
+      },
       origem: "",
       dataAgendamento: dataAtualFormatada(),
     };
