@@ -23,7 +23,7 @@ Instruções para a subida do projeto:
 
 Realizar a instalação do Node (https://nodejs.org/en/download/)
 
-Realizar a instalação do vue cli através do npm (https://cli.vuejs.org/guide/installation.html)
+Realizar a instalação do vue  (https://br.vuejs.org/v2/guide/installation.html)
 
 Na raíz do projeto, onde se localiza o arquivo package.json, baixar as dependencias do projeto, através do comando npm i.
 
