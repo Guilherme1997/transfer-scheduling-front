@@ -58,16 +58,7 @@
               />
             </div>
           </div>
-
           <div style="padding-top: 14px" class="d-flex align-items-center">
-            <!-- <button
-              type="button"
-              v-on:click="agendar"
-              class="btn btn-primary btn-sm"
-            >
-              Agendar
-            </button> -->
-
             <button @click="agendar()" class="btn btn-primary" type="button">
               Agendar
             </button>
@@ -79,6 +70,8 @@
 </template>
 
 <script>
+
+
 import { Money } from "v-money";
 
 export default {

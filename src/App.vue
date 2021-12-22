@@ -1,14 +1,14 @@
 <template>
   <div id="app">
-
-    <Form v-on:incrementar="adicionarQuantidade($event)" />
-    <Table v-bind:agendas="agendas"/>
+    <Form v-on:incrementar="agendar($event)" />
+    <Table v-bind:agendas="agendas" />
   </div>
 </template>
 
 <script>
 import Form from "./components/Form.vue";
 import Table from "./components/Table.vue";
+import WeService from "./services/WebService";
 
 export default {
   name: "App",
@@ -17,9 +17,32 @@ export default {
       agendas: [],
     };
   },
+  mounted() {
+    this.obterAgendas();
+  },
   methods: {
-    adicionarQuantidade(agenda) {
-     this.agendas.push(agenda)
+    obterAgendas() {
+      WeService.getAll()
+        .then((response) => {
+          this.agendas = response.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    cadastrarAgenda(agenda) {
+
+      agenda.valor = parseFloat(agenda.valor.replace("R$","").replace(".","").replace(",",".").trim())
+      WeService.create(agenda)
+        .then((response) => {
+          this.agendas.push(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    agendar(agenda) {
+      this.cadastrarAgenda(agenda);
     },
   },
   components: {
